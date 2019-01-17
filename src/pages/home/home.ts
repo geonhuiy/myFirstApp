@@ -19,7 +19,8 @@ export class HomePage {
   }
 
   ngOnInit() {
-    this.getImages();
+    //this.getImages();
+    this.getImagesMediaAPI();
   }
 
   getImages() {
@@ -32,5 +33,17 @@ export class HomePage {
         console.log(err);
       },
     );
+  }
+
+  getImagesMediaAPI () {
+    this.http.get<Pic[]>('http://media.mw.metropolia.fi/wbma/media?start=10&limit=10').subscribe(
+      (res: Pic[]) => {
+        this.picArray = res;
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    )
   }
 }
