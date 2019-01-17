@@ -35,15 +35,16 @@ export class HomePage {
     );
   }
 
-  getImagesMediaAPI () {
-    this.http.get<Pic[]>('http://media.mw.metropolia.fi/wbma/media?start=10&limit=10').subscribe(
+  getImagesMediaAPI() {
+    this.http.get<Pic[]>(
+      'http://media.mw.metropolia.fi/wbma/media?start=10&limit=10').subscribe(
       (res: Pic[]) => {
         this.picArray = res;
         console.log(res);
       },
       (err) => {
         console.log(err);
-      }
-    )
+      },
+    );
   }
 }
