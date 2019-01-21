@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { HttpClient } from '@angular/common/http';
 import { Pic } from '../../interface/pic';
+import { MediaProvider } from '../../providers/media/media';
 
 @Component({
 
@@ -12,35 +12,24 @@ import { Pic } from '../../interface/pic';
 
 export class HomePage {
   picArray: Pic[] = [];
-  mediaPath: string = 'assets/test.json';
 
-  constructor(public navCtrl: NavController, private http: HttpClient) {
-
+  constructor(
+    public navCtrl: NavController, private mediaProvider: MediaProvider) {
   }
 
   ngOnInit() {
-    //this.getImages();
-    this.getImagesMediaAPI();
+    this.getAllFiles();
   }
 
-  getImages() {
-    this.http.get<Pic[]>(this.mediaPath).subscribe(
+  getAllFiles = () => {
+    this.mediaProvider.getImagesMediaAPI().subscribe(
       (res: Pic[]) => {
-        this.picArray = res;
-        console.log(res);
-      },
-      (err) => {
-        console.log(err);
-      },
-    );
-  }
-
-  getImagesMediaAPI() {
-    this.http.get<Pic[]>(
-      'http://media.mw.metropolia.fi/wbma/media?start=10&limit=10').subscribe(
-      (res: Pic[]) => {
-        this.picArray = res;
-        console.log(res);
+        this.picArray = res.map((pic: Pic) => {
+          pic.thumbnails = {
+            '160': (pic.filename.split('.')[0] + '-tn160.png')
+          };
+          return pic;
+        });
       },
       (err) => {
         console.log(err);
