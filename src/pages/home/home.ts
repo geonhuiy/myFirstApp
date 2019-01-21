@@ -24,11 +24,14 @@ export class HomePage {
   getAllFiles = () => {
     this.mediaProvider.getImagesMediaAPI().subscribe(
       (res: Pic[]) => {
-        this.picArray = res.map((pic: Pic) => {
-          pic.thumbnails = {
-            '160': (pic.filename.split('.')[0] + '-tn160.png')
-          };
-          return pic;
+        res.forEach((pic: Pic) => {
+          this.mediaProvider.getSingleMedia(pic.file_id).subscribe(
+            (data: Pic) => {
+              /*pic.thumbnails = data.thumbnails;
+              this.picArray = res;*/
+              this.picArray.push(data);
+            },
+          );
         });
       },
       (err) => {
