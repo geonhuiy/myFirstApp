@@ -7,11 +7,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { MediaProvider } from '../providers/media/media';
+import { LoginRegisterPage } from '../pages/login-register/login-register';
+import { LogoutPage } from '../pages/logout/logout';
+import { MenuPage } from '../pages/menu/menu';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
+    LoginRegisterPage,
+    LogoutPage,
+    MenuPage
   ],
   imports: [
     BrowserModule,
@@ -22,6 +28,9 @@ import { MediaProvider } from '../providers/media/media';
   entryComponents: [
     MyApp,
     HomePage,
+    MenuPage,
+    LogoutPage,
+    LoginRegisterPage
   ],
   providers: [
     StatusBar,

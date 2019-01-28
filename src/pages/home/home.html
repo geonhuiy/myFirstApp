@@ -1,16 +1,8 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-navbar>
-</ion-header>
-
 <ion-content padding>
   <ion-list>
     <ion-item *ngFor="let image of picArray">
       <ion-thumbnail item-start>
-        <img [src]="mediaProvider.mediaUrl + '/uploads/' + image.thumbnails['160']">
+        <img [src]="mediaProvider.mediaUrl + '/uploads/' + image.thumbnails['w160']">
       </ion-thumbnail>
       <h2>{{image.title}}</h2>
       <p>{{image.description}}</p>

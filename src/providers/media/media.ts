@@ -1,6 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Pic } from '../../interface/pic';
+import { User, LoginResponse, RegisteredResponse } from '../../interface/media';
+import { NavController } from 'ionic-angular';
 
 /*
   Generated class for the MediaProvider provider.
@@ -11,8 +13,11 @@ import { Pic } from '../../interface/pic';
 @Injectable()
 export class MediaProvider {
   mediaUrl = 'http://media.mw.metropolia.fi/wbma';
+  loggedIn = false;
 
-  constructor(public http: HttpClient) {
+  constructor(
+    public http: HttpClient, private mediaProvider: MediaProvider,
+    private navCtrl: NavController) {
 
   }
 
@@ -24,5 +29,27 @@ export class MediaProvider {
   getSingleMedia(id: number) {
     return this.http.get<Pic>(
       this.mediaUrl + '/media/' + id);
+  }
+
+  register(user: User) {
+    const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-type': 'application/json',
+        }),
+      }
+    ;
+    return this.http.post<RegisteredResponse>(this.mediaUrl + '/users', user,
+      httpOptions);
+  }
+
+  login(user: User) {
+    const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-type': 'application/json',
+        }),
+      }
+    ;
+    return this.http.post<LoginResponse>(this.mediaUrl + '/login', user,
+      httpOptions);
   }
 }

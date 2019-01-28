@@ -1,25 +1,23 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
 import { Pic } from '../../interface/pic';
 import { MediaProvider } from '../../providers/media/media';
+import { NavController } from 'ionic-angular';
 
 @Component({
 
   selector: 'page-home',
-  templateUrl: 'home.html',
-
+  templateUrl: 'home.html'
 })
 
 export class HomePage {
   picArray: Pic[] = [];
 
   constructor(
-    public navCtrl: NavController, private mediaProvider: MediaProvider) {
+    private mediaProvider: MediaProvider) {
   }
 
   ngOnInit() {
-    this.getAllFiles();
-  }
+    this.getAllFiles();}
 
   getAllFiles = () => {
     this.mediaProvider.getImagesMediaAPI().subscribe(
