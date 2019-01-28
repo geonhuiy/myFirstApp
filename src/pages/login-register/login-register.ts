@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { MediaProvider } from '../../providers/media/media';
 import { User, LoginResponse, RegisteredResponse } from '../../interface/media';
+import { HomePage } from '../home/home';
 
 /**
  * Generated class for the LoginRegisterPage page.
@@ -60,7 +61,7 @@ export class LoginRegisterPage {
   registerData: User = { username: null };
 
   constructor(
-    public navCtrl: NavController,
+    private navCtrl: NavController,
     public navParams: NavParams,
     public mediaProvider: MediaProvider,
   ) {
@@ -77,7 +78,7 @@ export class LoginRegisterPage {
         console.log(response);
         localStorage.setItem('token', response.token);
         this.mediaProvider.loggedIn = true;
-        this.navCtrl.parent.select(0);
+        this.navCtrl.push(HomePage);
       },
       error => {
         console.log(error);
@@ -93,7 +94,7 @@ export class LoginRegisterPage {
         console.log(this.userData);
         this.mediaProvider.login(this.userData);
         this.mediaProvider.loggedIn = true;
-        this.navCtrl.parent.select(0);
+        this.navCtrl.push(HomePage);
         // console.log(this.userData);
       },
       error => {

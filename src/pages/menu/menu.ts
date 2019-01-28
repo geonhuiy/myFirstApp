@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { LoginRegisterPage } from '../login-register/login-register';
 import { LogoutPage } from '../logout/logout';
@@ -24,7 +24,7 @@ export class MenuPage {
   isToken = localStorage.getItem('token');
 
   constructor(
-    public navCtrl: NavController, public navParams: NavParams,
+    public navParams: NavParams,
     public mediaProvider: MediaProvider) {
 
   }

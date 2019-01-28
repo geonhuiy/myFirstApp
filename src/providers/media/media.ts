@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Pic } from '../../interface/pic';
 import { User, LoginResponse, RegisteredResponse } from '../../interface/media';
-import { NavController } from 'ionic-angular';
 
 /*
   Generated class for the MediaProvider provider.
@@ -16,8 +15,7 @@ export class MediaProvider {
   loggedIn = false;
 
   constructor(
-    public http: HttpClient, private mediaProvider: MediaProvider,
-    private navCtrl: NavController) {
+    public http: HttpClient) {
 
   }
 

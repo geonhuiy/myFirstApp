@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Pic } from '../../interface/pic';
 import { MediaProvider } from '../../providers/media/media';
-import { NavController } from 'ionic-angular';
+import { Observable} from 'rxjs';
 
 @Component({
 
@@ -10,31 +10,17 @@ import { NavController } from 'ionic-angular';
 })
 
 export class HomePage {
-  picArray: Pic[] = [];
+  picArray: Observable<Pic[]>;
 
   constructor(
     private mediaProvider: MediaProvider) {
+
   }
 
   ngOnInit() {
     this.getAllFiles();}
 
   getAllFiles = () => {
-    this.mediaProvider.getImagesMediaAPI().subscribe(
-      (res: Pic[]) => {
-        res.forEach((pic: Pic) => {
-          this.mediaProvider.getSingleMedia(pic.file_id).subscribe(
-            (data: Pic) => {
-              /*pic.thumbnails = data.thumbnails;
-              this.picArray = res;*/
-              this.picArray.push(data);
-            },
-          );
-        });
-      },
-      (err) => {
-        console.log(err);
-      },
-    );
+    this.picArray = this.mediaProvider.getImagesMediaAPI();
   }
 }
