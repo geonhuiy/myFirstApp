@@ -60,9 +60,9 @@ export class LoginRegisterPage {
   registerData: User = { username: null };
 
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public mediaProvider: MediaProvider,
+    private navCtrl: NavController,
+    private navParams: NavParams,
+    private mediaProvider: MediaProvider,
   ) {
 
   }

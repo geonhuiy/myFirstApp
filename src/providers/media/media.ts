@@ -16,8 +16,7 @@ export class MediaProvider {
   loggedIn = false;
 
   constructor(
-    public http: HttpClient, private mediaProvider: MediaProvider,
-    private navCtrl: NavController) {
+    public http: HttpClient) {
 
   }
 

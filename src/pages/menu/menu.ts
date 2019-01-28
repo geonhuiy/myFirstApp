@@ -24,8 +24,8 @@ export class MenuPage {
   isToken = localStorage.getItem('token');
 
   constructor(
-    public navCtrl: NavController, public navParams: NavParams,
-    public mediaProvider: MediaProvider) {
+    private navParams: NavParams,
+    private mediaProvider: MediaProvider) {
 
   }
 

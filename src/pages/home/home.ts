@@ -13,7 +13,7 @@ export class HomePage {
   picArray: Pic[] = [];
 
   constructor(
-    private mediaProvider: MediaProvider) {
+    private mediaProvider: MediaProvider, private navCtrl: NavController) {
   }
 
   ngOnInit() {
