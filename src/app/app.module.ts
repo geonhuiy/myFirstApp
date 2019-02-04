@@ -12,7 +12,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { MediaProvider } from '../providers/media/media';
 import { LoginRegisterPage } from '../pages/login-register/login-register';
-import { LogoutPage } from '../pages/logout/logout';
+import { ProfilePage } from '../pages/profile/profile';
 import { MenuPage } from '../pages/menu/menu';
 import { PipesModule } from '../pipes/pipes.module';
 
@@ -21,7 +21,7 @@ import { PipesModule } from '../pipes/pipes.module';
     MyApp,
     HomePage,
     LoginRegisterPage,
-    LogoutPage,
+    ProfilePage,
     MenuPage
   ],
   imports: [
@@ -35,7 +35,7 @@ import { PipesModule } from '../pipes/pipes.module';
     MyApp,
     HomePage,
     MenuPage,
-    LogoutPage,
+    ProfilePage,
     LoginRegisterPage
   ],
   providers: [

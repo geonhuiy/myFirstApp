@@ -17,3 +17,10 @@ export interface RegisteredResponse {
   message: string;
   user_id: number;
 }
+
+export interface ProfileResponse {
+  user_id: number;
+  username: string;
+  email: string;
+  full_name: string;
+}

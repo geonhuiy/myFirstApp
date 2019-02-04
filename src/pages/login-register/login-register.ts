@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { MediaProvider } from '../../providers/media/media';
-import { User, LoginResponse, RegisteredResponse } from '../../interface/media';
+import { LoginResponse, RegisteredResponse, User } from '../../interface/media';
 import { HomePage } from '../home/home';
 
 /**
@@ -68,17 +68,15 @@ export class LoginRegisterPage {
 
   }
 
-  ionViewDidLoad() {
-
-  }
-
   login() {
     this.mediaProvider.login(this.userData).subscribe(
       (response: LoginResponse) => {
         console.log(response);
         localStorage.setItem('token', response.token);
+        localStorage.setItem('user_id',response.user.user_id.toString());
         this.mediaProvider.loggedIn = true;
-        this.navCtrl.push(HomePage);
+        // this.navCtrl.push(HomePage);
+        this.navCtrl.parent.select(0);
       },
       error => {
         console.log(error);
@@ -95,10 +93,9 @@ export class LoginRegisterPage {
         this.mediaProvider.login(this.userData);
         this.mediaProvider.loggedIn = true;
         this.navCtrl.push(HomePage);
-        // console.log(this.userData);
       },
       error => {
-        if (error.status == 400) {
+        if (error.status === 400) {
           console.log(this.registerData.username + 'already exists');
           document.getElementById('registerUsername').
             insertAdjacentHTML('afterbegin', 'This username is taken');

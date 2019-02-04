@@ -7,6 +7,6 @@
 <ion-tabs>
   <ion-tab [root]="Home" tabIcon="home" tabTitle="Home"></ion-tab>
   <ion-tab [show]="!mediaProvider.loggedIn" [root]="Login" tabIcon="log-in" tabTitle="Log In"></ion-tab>
-  <ion-tab [show]="mediaProvider.loggedIn" [root]="Logout" tabIcon="log-out" tabTitle="Log Out" (click)="logout()"></ion-tab>
+  <ion-tab [show]="mediaProvider.loggedIn" [root]="Profile" tabIcon="profile" tabTitle="Profile"></ion-tab>
 </ion-tabs>
 

@@ -1,6 +1,6 @@
 export interface Pic {
   file_id: number;
-  user_id: number;
+  user_id: string;
   filename: string;
   filesize: string;
   title: string;
@@ -11,6 +11,7 @@ export interface Pic {
   screenshot?: string;
   thumbnails?: Thumbnail;
 }
+
 export interface Thumbnail {
   w160: string;
   w320?: string;

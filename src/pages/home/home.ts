@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { Pic } from '../../interface/pic';
 import { MediaProvider } from '../../providers/media/media';
-import { Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
 
   selector: 'page-home',
-  templateUrl: 'home.html'
+  templateUrl: 'home.html',
 })
 
 export class HomePage {
@@ -18,9 +18,11 @@ export class HomePage {
   }
 
   ngOnInit() {
-    this.getAllFiles();}
+    this.getAllFiles();
+  }
 
   getAllFiles = () => {
     this.picArray = this.mediaProvider.getImagesMediaAPI();
-  }
+    console.log(this.picArray);
+  };
 }

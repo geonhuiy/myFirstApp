@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { HomePage } from '../home/home';
 import { LoginRegisterPage } from '../login-register/login-register';
-import { LogoutPage } from '../logout/logout';
+import { ProfilePage } from '../profile/profile';
 import { MediaProvider } from '../../providers/media/media';
 
 /**
@@ -19,7 +19,7 @@ import { MediaProvider } from '../../providers/media/media';
 export class MenuPage {
   Home = HomePage;
   Login = LoginRegisterPage;
-  Logout = LogoutPage;
+  Profile = ProfilePage;
 
   isToken = localStorage.getItem('token');
 
