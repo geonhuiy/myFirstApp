@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { LoadingController, NavController, NavParams } from 'ionic-angular';
 import { MediaProvider } from '../../providers/media/media';
 
 /**
@@ -14,9 +14,16 @@ import { MediaProvider } from '../../providers/media/media';
   templateUrl: 'upload.html',
 })
 export class UploadPage {
+  loading: any;
+
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
-    private mediaProvider: MediaProvider) {
+    private mediaProvider: MediaProvider,
+    private loadingCtrl: LoadingController) {
+    this.loading = this.loadingCtrl.create({
+      content: 'Uploading media',
+      spinner: 'ios',
+    });
   }
 
   filedata = '';
@@ -37,13 +44,20 @@ export class UploadPage {
   showPreview() {
     const reader = new FileReader();
     reader.onloadend = (evt) => {
-      console.log(reader.result);
       this.filedata = reader.result;
     };
-    reader.readAsDataURL(this.file);
+
+    if (this.file.type.includes('video')) {
+      this.filedata = 'http://via.placeholder.com/500/200/000?text=Video';
+    } else if (this.file.type.includes('audio')) {
+      this.filedata = 'http://via.placeholder.com/500/200/000?text=Audio';
+    } else {
+      reader.readAsDataURL(this.file);
+    }
   }
 
   upload() {
+    // const filters = '<filters>';
     const fd = new FormData();
     fd.append('title', this.title);
     fd.append('description', this.description);
@@ -51,7 +65,10 @@ export class UploadPage {
     this.mediaProvider.uploadMedia(fd).subscribe(
       res => {
         console.log(res);
-        setTimeout(20000);
+        this.loading.present();
+        setTimeout(() => {
+          this.loading.dismiss();
+        }, 2000);
         this.navCtrl.pop().catch();
       },
     );
