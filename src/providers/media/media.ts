@@ -1,8 +1,9 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Pic } from "../../interface/pic";
-import { LoginResponse, RegisteredResponse, User } from "../../interface/media";
-import { Observable } from "rxjs";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Pic } from '../../interface/pic';
+import { LoginResponse, RegisteredResponse, User } from '../../interface/media';
+import { Observable } from 'rxjs';
+import { Http } from '@angular/http';
 
 /*
   Generated class for the MediaProvider provider.
@@ -12,56 +13,66 @@ import { Observable } from "rxjs";
 */
 @Injectable()
 export class MediaProvider {
-  mediaUrl = "http://media.mw.metropolia.fi/wbma";
+  mediaUrl = 'http://media.mw.metropolia.fi/wbma';
   loggedIn = false;
 
-  constructor(public http: HttpClient) {}
+  constructor(public http: HttpClient) {
+  }
 
   getImagesMediaAPI() {
-    return this.http.get<Pic[]>(this.mediaUrl + "/media");
+    return this.http.get<Pic[]>(this.mediaUrl + '/media');
   }
 
   getSingleMedia(id: number) {
-    return this.http.get<Pic>(this.mediaUrl + "/media/" + id);
+    return this.http.get<Pic>(this.mediaUrl + '/media/' + id);
   }
 
   register(user: User) {
     const httpOptions = {
       headers: new HttpHeaders({
-        "Content-type": "application/json"
-      })
+        'Content-type': 'application/json',
+      }),
     };
     return this.http.post<RegisteredResponse>(
-      this.mediaUrl + "/users",
+      this.mediaUrl + '/users',
       user,
-      httpOptions
+      httpOptions,
     );
   }
 
   login(user: User) {
     const httpOptions = {
       headers: new HttpHeaders({
-        "Content-type": "application/json"
-      })
+        'Content-type': 'application/json',
+      }),
     };
     return this.http.post<LoginResponse>(
-      this.mediaUrl + "/login",
+      this.mediaUrl + '/login',
       user,
-      httpOptions
+      httpOptions,
     );
   }
 
   getUserProfile() {
     const httpOptions = {
       headers: new HttpHeaders({
-        "Content-type": "x-access-token",
-        "x-access-token": localStorage.getItem("token")
-      })
+        'Content-type': 'x-access-token',
+        'x-access-token': localStorage.getItem('token'),
+      }),
     };
-    return this.http.get<User>(this.mediaUrl + "/users/user", httpOptions);
+    return this.http.get<User>(this.mediaUrl + '/users/user', httpOptions);
   }
 
   getAllProfilePictures() {
-    return this.http.get(this.mediaUrl + "/tags/profile");
+    return this.http.get(this.mediaUrl + '/tags/profile');
+  }
+
+  uploadMedia(data: any) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'x-access-token': localStorage.getItem('token'),
+      }),
+    };
+    return this.http.post<any>(this.mediaUrl + '/media', data, httpOptions);
   }
 }
