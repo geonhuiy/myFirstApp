@@ -17,3 +17,4 @@ export interface Thumbnail {
   w320?: string;
   w640?: string;
 }
+

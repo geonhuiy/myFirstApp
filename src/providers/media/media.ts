@@ -75,4 +75,13 @@ export class MediaProvider {
     };
     return this.http.post<any>(this.mediaUrl + '/media', data, httpOptions);
   }
+
+  uploadTag(tag: string) {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'x-access-token': localStorage.getItem('token'),
+      }),
+    };
+    return this.http.post<any>(this.mediaUrl + '/tags', tag, httpOptions);
+  }
 }

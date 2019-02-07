@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { LoadingController, NavController, NavParams } from 'ionic-angular';
 import { MediaProvider } from '../../providers/media/media';
-
 /**
  * Generated class for the UploadPage page.
  *
@@ -30,6 +29,12 @@ export class UploadPage {
   file: File;
   title = '';
   description = '';
+  filter = {
+    'brightness': '1',
+    'contrast': '1',
+    'saturation': '1',
+    'warmth': '1',
+  };
 
   ionViewDidLoad() {
     // Do something
@@ -60,8 +65,9 @@ export class UploadPage {
     // const filters = '<filters>';
     const fd = new FormData();
     fd.append('title', this.title);
-    fd.append('description', this.description);
+    fd.append('description', JSON.stringify(this.filter));
     fd.append('file', this.file);
+    console.log(this.filter);
     this.mediaProvider.uploadMedia(fd).subscribe(
       res => {
         console.log(res);
