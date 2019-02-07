@@ -16,7 +16,7 @@ import { ProfilePage } from '../pages/profile/profile';
 import { MenuPage } from '../pages/menu/menu';
 import { PipesModule } from '../pipes/pipes.module';
 import { UploadPage } from '../pages/upload/upload';
-
+import { Chooser } from '@ionic-native/chooser';
 @NgModule({
   declarations: [
     MyApp,
@@ -44,8 +44,9 @@ import { UploadPage } from '../pages/upload/upload';
   providers: [
     StatusBar,
     SplashScreen,
+    Chooser,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    MediaProvider
+    MediaProvider,
   ],
 })
 export class AppModule {

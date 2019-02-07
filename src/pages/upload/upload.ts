@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController, NavParams } from 'ionic-angular';
+import { LoadingController, NavController, NavParams, Platform } from 'ionic-angular';
 import { MediaProvider } from '../../providers/media/media';
+import { Chooser } from '@ionic-native/chooser';
 /**
  * Generated class for the UploadPage page.
  *
@@ -18,7 +19,9 @@ export class UploadPage {
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
     private mediaProvider: MediaProvider,
-    private loadingCtrl: LoadingController) {
+    private loadingCtrl: LoadingController,
+    private chooser: Chooser,
+    private platform: Platform) {
     this.loading = this.loadingCtrl.create({
       content: 'Uploading media',
       spinner: 'ios',
@@ -27,6 +30,7 @@ export class UploadPage {
 
   filedata = '';
   file: File;
+  emptyFile = this.file;
   title = '';
   description = '';
   filter = {
@@ -35,6 +39,10 @@ export class UploadPage {
     'saturation': '1',
     'warmth': '1',
   };
+  mediaBlob: Blob;
+  emptyBlob = this.mediaBlob;
+  isPc = this.platform.is('core');
+  isAndroid = this.platform.is('android');
 
   ionViewDidLoad() {
     // Do something
@@ -51,23 +59,34 @@ export class UploadPage {
     reader.onloadend = (evt) => {
       this.filedata = reader.result;
     };
-
-    if (this.file.type.includes('video')) {
-      this.filedata = 'http://via.placeholder.com/500/200/000?text=Video';
-    } else if (this.file.type.includes('audio')) {
-      this.filedata = 'http://via.placeholder.com/500/200/000?text=Audio';
-    } else {
-      reader.readAsDataURL(this.file);
+    if (this.isPc) {
+      if (this.file.type.includes('video')) {
+        this.filedata = 'http://via.placeholder.com/500/200/000?text=Video';
+      } else if (this.file.type.includes('audio')) {
+        this.filedata = 'http://via.placeholder.com/500/200/000?text=Audio';
+      } else {
+        reader.readAsDataURL(this.file);
+      }
+    } else if (this.isAndroid) {
+      if (this.mediaBlob.type.includes('video')) {
+        this.filedata = 'http://via.placeholder.com/500/200/000?text=Video';
+      } else if (this.mediaBlob.type.includes('audio')) {
+        this.filedata = 'http://via.placeholder.com/500/200/000?text=Audio';
+      } else {
+        reader.readAsDataURL(this.mediaBlob);
+      }
     }
   }
 
   upload() {
-    // const filters = '<filters>';
     const fd = new FormData();
     fd.append('title', this.title);
-    fd.append('description', JSON.stringify(this.filter));
-    fd.append('file', this.file);
-    console.log(this.filter);
+    fd.append('description', this.description/*JSON.stringify(this.filter)*/);
+    if (this.isPc) {
+      fd.append('file', this.file);
+    } else if (this.isAndroid) {
+      fd.append('file', this.mediaBlob);
+    }
     this.mediaProvider.uploadMedia(fd).subscribe(
       res => {
         console.log(res);
@@ -78,5 +97,28 @@ export class UploadPage {
         this.navCtrl.pop().catch();
       },
     );
+  }
+
+  choose() {
+    this.chooser.getFile('image/*,video/*,audio/*').
+      then(
+        file => {
+          console.log(file ? file.name : 'filename');
+          this.mediaBlob = new Blob([file.data],
+            { type: file.mediaType });
+          this.showPreview();
+        }).catch(err => {
+      // Do something
+    });
+
+  }
+
+  resetBlob() {
+    this.filedata = '';
+    if (this.isAndroid) {
+      this.mediaBlob = this.emptyBlob;
+    } else if (this.isPc) {
+      this.file = this.emptyFile;
+    }
   }
 }

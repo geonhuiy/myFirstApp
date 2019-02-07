@@ -20,28 +20,32 @@
       <ion-label>Description</ion-label>
       <ion-textarea [(ngModel)]="description" name="description"></ion-textarea>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="isPc">
       <ion-label>Choose media file</ion-label>
       <ion-input type="file" (change)="handleChange($event)"></ion-input>
     </ion-item>
-    <button ion-button type="submit">Upload</button>
+    <button ion-button type="submit" [disabled]="title?.length < 5">Upload</button>
+    <button ion-button type="reset" (click)="resetBlob()">Reset</button>
   </form>
 
+  <button ion-button (click)="choose()" *ngIf="isAndroid"> Choose media</button>
+
   <ion-card>
-    <img #preview [src]="filedata" [ngStyle]="{ 'filter' :'brightness(' + filter.brightness + ') contrast(' + filter.contrast + ') saturate(' + filter.saturation + '%) sepia(' + filter.warmth + '%)'}">
-    <ion-range min="0" max="100" [(ngModel)]="filter.brightness" name="brightness">
+    <img #preview [src]="filedata"
+         [ngStyle]="{ 'filter' :'brightness(' + filter.brightness + ') contrast(' + filter.contrast + ') saturate(' + filter.saturation + '%) sepia(' + filter.warmth + '%)'}">
+    <ion-range min="0" max="100" [(ngModel)]="filter.brightness" name="brightness" *ngIf="mediaBlob!==null && mediaBlob !== undefined  || file!==null && file!==undefined">
       <ion-icon small range-left name="sunny"></ion-icon>
       <ion-icon range-right name="sunny"></ion-icon>
     </ion-range>
-    <ion-range min="0" max="100" [(ngModel)]="filter.contrast" name="contrast">
+    <ion-range min="0" max="100" [(ngModel)]="filter.contrast" name="contrast" *ngIf="mediaBlob!==null && mediaBlob !== undefined || file!==null && file!==undefined">
       <ion-icon small range-left name="contrast"></ion-icon>
       <ion-icon range-right name="contrast"></ion-icon>
     </ion-range>
-    <ion-range min="0" max="100" [(ngModel)]="filter.saturation" name="saturation">
+    <ion-range min="0" max="100" [(ngModel)]="filter.saturation" name="saturation" *ngIf="mediaBlob!==null && mediaBlob !== undefined || file!==null && file!==undefined">
       <ion-icon small range-left name="water"></ion-icon>
       <ion-icon range-right name="water"></ion-icon>
     </ion-range>
-    <ion-range min="0" max="100" [(ngModel)]="filter.warmth" name="warmth">
+    <ion-range min="0" max="100" [(ngModel)]="filter.warmth" name="warmth" *ngIf="mediaBlob!==null && mediaBlob !== undefined || file!==null && file!==undefined">
       <ion-icon small range-left name="thermometer"></ion-icon>
       <ion-icon range-right name="thermometer"></ion-icon>
     </ion-range>
