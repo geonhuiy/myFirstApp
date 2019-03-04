@@ -44,10 +44,6 @@ export class UploadPage {
   isPc = this.platform.is('core');
   isAndroid = this.platform.is('android');
 
-  ionViewDidLoad() {
-    // Do something
-  }
-
   handleChange($event) {
     // console.log($event.target.files[0]);
     this.file = $event.target.files[0];
