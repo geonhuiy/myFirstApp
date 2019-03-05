@@ -24,3 +24,11 @@ export interface ProfileResponse {
   email: string;
   full_name: string;
 }
+
+export interface UsernameStatus {
+  username: string;
+  available: boolean;
+}
+
+
+

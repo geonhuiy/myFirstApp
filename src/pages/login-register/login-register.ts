@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
+import {AlertController, NavController, NavParams} from 'ionic-angular';
 import { MediaProvider } from '../../providers/media/media';
-import { LoginResponse, RegisteredResponse, User } from '../../interface/media';
+import {LoginResponse, RegisteredResponse, User, UsernameStatus} from '../../interface/media';
 import { HomePage } from '../home/home';
 
 /**
@@ -14,85 +14,24 @@ import { HomePage } from '../home/home';
 @Component({
   selector: 'page-login-register',
   templateUrl: 'login-register.html',
-
-  template: `
-    <form *ngIf="hasAccount" (ngSubmit)="login(); logForm()">
-      <ion-item>
-        <ion-label>Username</ion-label>
-        <ion-input
-          type="text"
-          [(ngModel)]="userData.username"
-          name="username"
-        ></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label id="password">Password</ion-label>
-        <ion-input
-          type="text"
-          [(ngModel)]="userData.password"
-          name="password"
-        ></ion-input>
-      </ion-item>
-      <button ion-button type="submit" block>Log In</button>
-      <button ion-button (click)="hasAccount = false">
-        Don't have an account? Click here
-      </button>
-    </form>
-
-    <form *ngIf="!hasAccount" (ngSubmit)="register()">
-      <ion-item>
-        <ion-label id="registerUsername">Register Username</ion-label>
-        <ion-input
-          type="text"
-          [(ngModel)]="registerData.username"
-          name="username"
-        ></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label id="password2">Register password</ion-label>
-        <ion-input
-          type="text"
-          [(ngModel)]="registerData.password"
-          name="password"
-        ></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label id="password2">Confirm password</ion-label>
-        <ion-input
-          type="text"
-          [(ngModel)]="confirmPassword.password"
-          name="password"
-        ></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label>Email</ion-label>
-        <ion-input
-          type="text"
-          [(ngModel)]="registerData.email"
-          name="email"
-        ></ion-input>
-      </ion-item>
-      <button ion-button type="submit" block>Sign up</button>
-      <button ion-button (click)="hasAccount = true">
-        Already have an account? Click here
-      </button>
-    </form>
-  `,
 })
 export class LoginRegisterPage {
-  logForm() {
-    console.log(this.userData);
-  }
-
   userData: User = { username: null };
   registerData: User = { username: null };
-  confirmPassword: User = { username: null };
   hasAccount = true;
+  private passwordCheck: string;
+  private usernameCheck = true;
+  private passwordMatch = true;
+  private registering = true;
+  @ViewChild('loginForm') loginForm;
+  @ViewChild('registerForm') registerForm;
 
   constructor(
-    private navCtrl: NavController,
+    public navCtrl: NavController,
     public navParams: NavParams,
-    public mediaProvider: MediaProvider) {
+    private mediaProvider: MediaProvider,
+    private alertCtrl: AlertController,
+  ) {
   }
 
   login() {
@@ -100,10 +39,14 @@ export class LoginRegisterPage {
       (response: LoginResponse) => {
         console.log(response);
         localStorage.setItem('token', response.token);
-        localStorage.setItem('user_id', response.user.user_id.toString());
+        localStorage.setItem('userId', response.user.user_id.toString());
         this.mediaProvider.loggedIn = true;
-        // this.navCtrl.push(HomePage);
         this.navCtrl.parent.select(0);
+        if (this.hasAccount) {
+          this.loginForm.reset();
+        } else {
+          this.registerForm.reset();
+        }
       },
       error => {
         console.log(error);
@@ -112,29 +55,52 @@ export class LoginRegisterPage {
   }
 
   register() {
-    if (this.registerData.password !== this.confirmPassword.password) {
-      console.log('Password does not match');
-    } else {
+    if (this.usernameCheck && this.passwordMatch) {
       this.mediaProvider.register(this.registerData).subscribe(
         (response: RegisteredResponse) => {
           console.log(response);
+          this.registering = true;
           this.userData.username = this.registerData.username;
           this.userData.password = this.registerData.password;
-          console.log(this.userData);
-          this.mediaProvider.login(this.userData);
-          this.mediaProvider.loggedIn = true;
-          // this.navCtrl.push(HomePage);
-          this.navCtrl.parent.select(0);
+          this.login();
         },
-        error => {
-          if (error.status === 400) {
-            console.log(error);
-            document.getElementById('registerUsername').
-              insertAdjacentHTML('afterbegin', 'This username is taken');
-          }
+        (error) => {
           console.log(error);
         },
       );
+    } else {
+      this.presentAlert('Please fix errors in the form');
     }
+
+  }
+
+  checkUsername() {
+    this.mediaProvider.getUserName(this.registerData.username).subscribe(
+      (response: UsernameStatus) => {
+        console.log(response);
+        console.log(this.registerForm);
+        if (response.available) {
+          this.usernameCheck = true;
+        } else {
+          this.registerForm.form.controls['newUsername'].setErrors(
+            { 'incorrect': true });
+          this.usernameCheck = false;
+        }
+      },
+      error => {
+        console.log(error);
+      });
+  }
+
+  checkPassword() {
+    this.passwordMatch = this.registerData.password === this.passwordCheck;
+  }
+
+  presentAlert(message: string) {
+    const alert = this.alertCtrl.create({
+      title: message,
+      buttons: ['OK'],
+    });
+    alert.present();
   }
 }

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Pic } from '../../interface/pic';
-import { LoginResponse, RegisteredResponse, User } from '../../interface/media';
+import {LoginResponse, RegisteredResponse, User, UsernameStatus} from '../../interface/media';
 import { Observable } from 'rxjs';
 import { Http } from '@angular/http';
 
@@ -83,5 +83,10 @@ export class MediaProvider {
       }),
     };
     return this.http.post<any>(this.mediaUrl + '/tags', tag, httpOptions);
+  }
+
+  getUserName(username: string) {
+    return this.http.get<UsernameStatus>(
+      this.mediaUrl + '/users/username/' + username);
   }
 }
